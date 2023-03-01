@@ -10,6 +10,8 @@ const kindInput = document.querySelector('.kind__input'); // поле с наз�
 const colorInput = document.querySelector('.color__input'); // поле с названием цвета
 const weightInput = document.querySelector('.weight__input'); // поле с весом
 const addActionButton = document.querySelector('.add__action__btn'); // кнопка добавления
+const minWeightInput = document.querySelector('.minweight__input'); // поле ввода минимального веса
+const maxWeightInput = document.querySelector('.maxweight__input'); // поле ввода максимального веса
 
 // список фруктов в JSON формате
 let fruitsJSON = `[
@@ -28,13 +30,9 @@ let fruits = JSON.parse(fruitsJSON);
 // отрисовка карточек
 const display = () => {
   
-  // TODO: очищаем fruitsList от вложенных элементов,
-  // чтобы заполнить актуальными данными из fruits
   fruitsList.innerHTML = null;
 
   for (let i = 0; i < fruits.length; i++) {
-    // TODO: формируем новый элемент <li> при помощи document.createElement,
-    // и добавляем в конец списка fruitsList при помощи document.appendChild
 
     let divIndex = document.createElement('div');
     divIndex.className = 'fruit__info';
@@ -78,34 +76,20 @@ display();
 
 /*** ПЕРЕМЕШИВАНИЕ ***/
 
-// генерация случайного числа в заданном диапазоне
-const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 // перемешивание массива
 const shuffleFruits = () => {
   let result = [];
   controlArr = fruits.slice();
 
-  // ATTENTION: сейчас при клике вы запустите бесконечный цикл и браузер зависнет
   while (fruits.length > 0) {
-    // TODO: допишите функцию перемешивания массива
-    //
-    // Подсказка: находим случайный элемент из fruits, используя getRandomInt
-    // вырезаем его из fruits и вставляем в result.
-    // ex.: [1, 2, 3], [] => [1, 3], [2] => [3], [2, 1] => [], [2, 1, 3]
-    // (массив fruits будет уменьшатся, а result заполняться)
         numRandom = Math.floor(Math.random() * fruits.length);
         result.push(fruits[numRandom]);
         fruits.splice(numRandom, 1);  
   }
-
   fruits = result;
   if (JSON.stringify(fruits) === JSON.stringify(controlArr)) {
     alert('Порядок не изменился! Поворите перемешивание!');
   }
-
 };
 
 shuffleButton.addEventListener('click', () => {
@@ -117,15 +101,40 @@ shuffleButton.addEventListener('click', () => {
 
 // фильтрация массива
 const filterFruits = () => {
-  fruits.filter((item) => {
-    // TODO: допишите функцию
-  });
+  let result = [];
+  if (parseInt(minWeightInput.value) == 0 && parseInt(maxWeightInput.value == 0)) {  
+    alert('Параметры фильтрации заданы некорректно!');
+    return fruits;
+  } 
+  if (parseInt(minWeightInput.value) < 0 || parseInt(maxWeightInput.value < 0)) {
+    alert('Вес фруктов не может быть отрицательным!');
+    return fruits;
+  } 
+  if (parseInt(maxWeightInput.value) < parseInt(minWeightInput.value)) {
+    alert('Максимальный вес не может быть меньше минимального веса!');
+    return fruits;
+  } 
+    for (let i = 0; i < fruits.length; i++) {
+      if ((fruits[i].weight >= parseInt(minWeightInput.value)) && (fruits[i].weight <= parseInt(maxWeightInput.value))) {
+        result.push(fruits[i]);
+      }
+    }
+    fruits = result;  
 };
 
-filterButton.addEventListener('click', () => {
-  filterFruits();
-  display();
-});
+// сброс фильтрации 
+const filterFruitsClear = () => {
+  fruits = [];
+  fruits = archiveArr.slice();
+  minWeightInput.value = 0;
+  maxWeightInput.value = 0;
+  }
+  
+    filterButton.addEventListener('click', () => {
+    fruits = archiveArr.slice();
+    filterFruits();
+    display();
+  });
 
 /*** СОРТИРОВКА ***/
 
