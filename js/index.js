@@ -13,6 +13,9 @@ const addActionButton = document.querySelector('.add__action__btn'); // кноп
 const minWeightInput = document.querySelector('.minweight__input'); // поле ввода минимального веса
 const maxWeightInput = document.querySelector('.maxweight__input'); // поле ввода максимального веса
 
+minWeightInput.value = 0;
+maxWeightInput.value = 0;
+
 // список фруктов в JSON формате
 let fruitsJSON = `[
   {"kind": "Мангустин", "color": "фиолетовый", "weight": 13},
